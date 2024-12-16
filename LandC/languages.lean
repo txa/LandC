@@ -101,8 +101,10 @@ def l2_aux : Finset (Word Alph)
 def l2 : Lang Alph
 := l2_aux
 
+/-
 def l3 : Lang Alph
 := { (~~ "abc") }
+-/
 
 def l4 : Lang Alph
 := ({ (~~ "abc" : Word Alph) } : Finset (Word Alph))
