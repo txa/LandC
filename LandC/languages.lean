@@ -1,20 +1,48 @@
 import Mathlib.Data.Finset.Basic
-import Mathlib.Data.List.Lemmas  -- For list utilities
-open Std
-
+import Mathlib.Data.List.Lemmas
 namespace lang
-
-
 
 variable {σ : Type}[DecidableEq σ]
 
 variable (Alph : Finset σ)
 
-def Word : Type
+abbrev Word : Type
 := List Alph
 
-def Lang : Type
+def epsilon : Word Alph
+:= []
+
+abbrev Lang : Type
 := Word Alph → Prop
+
+def l_empty : Lang Alph
+:= λ _ ↦ False
+
+notation "∅" => l_empty
+
+def l_union (l1 l2 : Lang Alph) : Lang Alph
+:= λ w ↦ l1 w ∨ l2 w
+
+infix:70 " ∪ " => l_union
+
+def l_epsilon : Lang Alph
+:= λ w ↦ w = epsilon Alph
+
+notation "ε" => l_epsilon
+
+variable (w1 w2 : Word Alph)
+
+inductive lang_append (l1 l2 : Lang Alph) : Lang Alph
+| l_app : l1 w1 → l2 w2 → lang_append l1 l2 (w1 ++ w2)
+
+infix:70 " · " => lang_append
+
+inductive lang_star (l1 : Lang Alph) : Lang Alph
+| l_star_nil : lang_star l1 (epsilon Alph)
+| l_star_app : l1 w1 → lang_star l1 w2
+    → lang_star l1 (w1 ++ w2)
+
+postfix:100 " * " => lang_star
 
 end lang
 
@@ -107,4 +135,7 @@ def l3 : Lang Alph
 -/
 
 def l4 : Lang Alph
-:= ({ (~~ "abc" : Word Alph) } : Finset (Word Alph))
+:= ({ ~~ "abc" } : Finset (Word Alph))
+
+def l5 : Lang Alph
+:= ({ ~~ "a" , ~~ "aa" , ~~ "aaa" } : Finset (Word Alph))
