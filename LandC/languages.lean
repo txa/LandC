@@ -86,4 +86,20 @@ def w3 : Word Alph
 def w4 : Word Alph
   := ~~ "abd"
 -/
---def l1 : Lang Char
+def l1 : Lang Alph
+:= λ w ↦ w = ~~ "abc"
+
+example : l1 (~~ "abc")
+:= by dsimp [l1]
+
+instance : Coe (Finset (Word Alph)) (Lang Alph) where
+  coe s := λ x ↦ x ∈ s
+
+def l2_aux : Finset (Word Alph)
+:= { ~~ "abc"}
+
+def l2 : Lang Alph
+:= l2_aux
+
+def l3 : Lang Alph
+:= { (~~ "abc") }
